@@ -3,10 +3,15 @@ import 'package:zync/screens/welcome_screen.dart';
 import 'package:zync/screens/login_screen.dart';
 import 'package:zync/screens/registration_screen.dart';
 import 'package:zync/screens/chat_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(FlashChat());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(zync());
+}
 
-class FlashChat extends StatelessWidget {
+class zync extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

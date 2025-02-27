@@ -27,7 +27,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               tag: 'logo',
               child: Image.asset(
                 'images/logo.jpg',
-                height: 300.0,
+                height: 350.0,
               ),
             ),
             RoundedButton(
