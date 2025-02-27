@@ -16,41 +16,49 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Hero(
-              tag: 'logo',
-              child: Image.asset(
-                'images/logo.jpg',
-                height: 350.0,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF121212), Color(0xFF1E1E2E)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Hero(
+                tag: 'logo',
+                child: Image.asset(
+                  'images/logo.png',
+                  height: 120.0,
+                ),
               ),
-            ),
-            RoundedButton(
-              color: Colors.lightBlueAccent,
-              title: 'Log In',
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  LoginScreen.id,
-                );
-              },
-            ),
-            RoundedButton(
-              color: Colors.blueAccent,
-              title: 'Register',
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  RegistrationScreen.id,
-                );
-              },
-            ),
-          ],
+              RoundedButton(
+                color: Colors.lightBlueAccent,
+                title: 'Log In',
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    LoginScreen.id,
+                  );
+                },
+              ),
+              RoundedButton(
+                color: Colors.blueAccent,
+                title: 'Register',
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    RegistrationScreen.id,
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
