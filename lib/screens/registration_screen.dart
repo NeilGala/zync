@@ -3,7 +3,9 @@ import 'package:zync/components/rounded_button.dart';
 import 'package:zync/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:zync/screens/chat_screen.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:loading_indicator/loading_indicator.dart';
+import 'package:zync/screens/dash_screen.dart';
+import 'package:zync/screens/login_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String id = 'registration_screen';
@@ -18,6 +20,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   String? password;
   final emailController = TextEditingController();
   Color emailBorderColor = Colors.white;
+  String errorMessage = '';
 
   @override
   void initState() {
@@ -60,93 +63,103 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             end: Alignment.bottomRight,
           ),
         ),
-        child: ModalProgressHUD(
-          inAsyncCall: showSpinner,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Flexible(
-                  child: Hero(
-                    tag: 'logo',
-                    child: Container(
-                      height: 200.0,
-                      child: Image.asset('images/logo.png'),
-                    ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Flexible(
+                child: Hero(
+                  tag: 'logo',
+                  child: Container(
+                    height: 200.0,
+                    child: Image.asset('images/logo.png'),
                   ),
                 ),
-                SizedBox(
-                  height: 30.0,
-                ),
-                TextField(
-                  controller: emailController,
-                  textAlign: TextAlign.center,
-                  keyboardType: TextInputType.emailAddress,
-                  onChanged: (value) {
-                    email = value;
-                  },
-                  decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Enter your Email',
-                    enabledBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: emailBorderColor, width: 2.0),
-                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                          BorderSide(color: emailBorderColor, width: 2.0),
-                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                    ),
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
+              TextField(
+                controller: emailController,
+                textAlign: TextAlign.center,
+                keyboardType: TextInputType.emailAddress,
+                onChanged: (value) {
+                  email = value;
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                  hintText: 'Enter your Email',
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: emailBorderColor, width: 2.0),
+                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
                   ),
-                  style: TextStyle(
-                    color: Colors.white,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: emailBorderColor, width: 2.0),
+                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
                   ),
                 ),
-                SizedBox(
-                  height: 15.0,
+                style: TextStyle(
+                  color: Colors.white,
                 ),
-                TextField(
-                  textAlign: TextAlign.center,
-                  obscureText: true,
-                  onChanged: (value) {
-                    password = value;
-                  },
-                  decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Set your Password',
-                  ),
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+              ),
+              SizedBox(
+                height: 15.0,
+              ),
+              TextField(
+                textAlign: TextAlign.center,
+                obscureText: true,
+                onChanged: (value) {
+                  password = value;
+                },
+                decoration: kTextFieldDecoration.copyWith(
+                  hintText: 'Set your Password',
                 ),
-                SizedBox(
-                  height: 24.0,
+                style: TextStyle(
+                  color: Colors.white,
                 ),
-                RoundedButton(
-                  color: Color(0xFFB2B2B2),
-                  title: 'Register',
-                  onPressed: () async {
-                    setState(() {
-                      showSpinner = true;
-                    });
-                    try {
-                      final newUser =
-                          await _auth.createUserWithEmailAndPassword(
-                              email: email!, password: password!);
-                      if (newUser != null) {
-                        Navigator.pushNamed(context, ChatScreen.id);
-                      }
-                      setState(() {
-                        showSpinner = false;
-                      });
-                    } catch (e) {
-                      print(e);
+              ),
+              SizedBox(
+                height: 24.0,
+              ),
+              RoundedButton(
+                color: Color(0xFFB2B2B2),
+                title: 'Register',
+                onPressed: () async {
+                  setState(() {
+                    showSpinner = true;
+                    errorMessage = '';
+                  });
+                  try {
+                    final newUser = await _auth.createUserWithEmailAndPassword(
+                        email: email!, password: password!);
+                    if (newUser != null) {
+                      Navigator.pushNamed(context, LoginScreen.id);
                     }
-                  },
+                    setState(() {
+                      showSpinner = false;
+                    });
+                  } catch (e) {
+                    setState(() {
+                      showSpinner = false;
+                      errorMessage = e.toString();
+                    });
+                  }
+                },
+              ),
+              if (showSpinner)
+                Center(
+                  child: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: LoadingIndicator(
+                      indicatorType: Indicator.ballPulse,
+                      colors: [Colors.white],
+                      strokeWidth: 2,
+                    ),
+                  ),
                 ),
-              ],
-            ),
+            ],
           ),
         ),
       ),
