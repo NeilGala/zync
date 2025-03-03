@@ -16,6 +16,36 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   bool showSpinner = false;
   String? email;
   String? password;
+  final emailController = TextEditingController();
+  Color emailBorderColor = Colors.white;
+
+  @override
+  void initState() {
+    super.initState();
+    emailController.addListener(() {
+      final emailText = emailController.text;
+      if (emailText.isEmpty) {
+        setState(() {
+          emailBorderColor = Colors.white;
+        });
+      } else if (RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(emailText)) {
+        setState(() {
+          emailBorderColor = Color(0xFF24D876);
+        });
+      } else {
+        setState(() {
+          emailBorderColor = Colors.red;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +81,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   height: 30.0,
                 ),
                 TextField(
+                  controller: emailController,
                   textAlign: TextAlign.center,
                   keyboardType: TextInputType.emailAddress,
                   onChanged: (value) {
@@ -58,9 +89,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   },
                   decoration: kTextFieldDecoration.copyWith(
                     hintText: 'Enter your Email',
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: emailBorderColor, width: 2.0),
+                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: emailBorderColor, width: 2.0),
+                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                    ),
                   ),
                   style: TextStyle(
-                    color: Colors.white, // Change this to your desired color
+                    color: Colors.white,
                   ),
                 ),
                 SizedBox(
@@ -73,10 +114,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     password = value;
                   },
                   decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Enter your Password',
+                    hintText: 'Set your Password',
                   ),
                   style: TextStyle(
-                    color: Colors.white, // Change this to your desired color
+                    color: Colors.white,
                   ),
                 ),
                 SizedBox(
