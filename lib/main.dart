@@ -25,9 +25,3 @@ class zync extends StatelessWidget {
     );
   }
 }
-
-//theme: ThemeData.dark().copyWith(
-//         textTheme: TextTheme(
-//           bodyMedium: TextStyle(color: Colors.black54),
-//         ),
-//       ),
